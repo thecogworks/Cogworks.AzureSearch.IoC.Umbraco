@@ -1,0 +1,1 @@
+Cogworks.AzureSearch.IoC.Umbraco
