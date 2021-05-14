@@ -18,7 +18,7 @@ jobs:
       NUGET_FEED: https://api.nuget.org/v3/index.json
 
       # Project Setup
-      PROJECT_NAME: 'Cogworks.AzureSearch'
+      PROJECT_NAME: 'Cogworks.AzureSearch.Umbraco'
 
     steps:
       - name: Checkout master

@@ -23,7 +23,7 @@ jobs:
 
       # Solution Setup
       CONFIG: 'Release'
-      PROJECT_NAME: 'Cogworks.AzureSearch'
+      PROJECT_NAME: 'Cogworks.AzureSearch.Umbraco'
       VERSION: '1.0.0'
       SOURCE_PATH: './src'
 
