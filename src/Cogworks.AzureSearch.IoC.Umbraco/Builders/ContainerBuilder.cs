@@ -44,13 +44,15 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
             return this;
         }
 
-        public IContainerBuilder RegisterClientOptions(string serviceName, string credentials, string serviceEndpointUrl)
+        public IContainerBuilder RegisterClientOptions(string serviceName, string credentials,
+            string serviceEndpointUrl, bool searchHeaders = false)
         {
             _composingRegister.Register(
                 _ => new ClientOption(
                     serviceName,
                     credentials,
-                    serviceEndpointUrl),
+                    serviceEndpointUrl,
+                    searchHeaders),
                 Lifetime.Singleton);
 
             return this;

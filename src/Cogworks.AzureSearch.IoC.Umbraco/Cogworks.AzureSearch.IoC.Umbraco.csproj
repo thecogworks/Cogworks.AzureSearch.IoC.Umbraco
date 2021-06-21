@@ -39,14 +39,11 @@
     <Reference Include="Azure.Search.Documents, Version=11.2.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Azure.Search.Documents.11.2.0\lib\netstandard2.0\Azure.Search.Documents.dll</HintPath>
     </Reference>
-    <Reference Include="Cogworks.AzureSearch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cogworks.AzureSearch.IoC.LightInject.1.0.0\lib\netstandard2.0\Cogworks.AzureSearch.dll</HintPath>
+    <Reference Include="Cogworks.AzureSearch, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Cogworks.AzureSearch.1.0.2\lib\netstandard2.0\Cogworks.AzureSearch.dll</HintPath>
     </Reference>
-    <Reference Include="Cogworks.AzureSearch.IoC.LightInject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cogworks.AzureSearch.IoC.LightInject.1.0.0\lib\netstandard2.0\Cogworks.AzureSearch.IoC.LightInject.dll</HintPath>
-    </Reference>
-    <Reference Include="LightInject, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\LightInject.5.4.0\lib\net46\LightInject.dll</HintPath>
+    <Reference Include="LightInject, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\LightInject.5.5.0\lib\net46\LightInject.dll</HintPath>
     </Reference>
     <Reference Include="LightInject.Annotation, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\LightInject.Annotation.1.1.0\lib\net46\LightInject.Annotation.dll</HintPath>

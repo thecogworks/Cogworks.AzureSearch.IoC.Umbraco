@@ -16,15 +16,13 @@
     <dependencies>
       <group targetFramework="net472">
         <dependency id="Azure.Search.Documents" version="11.2.0" />
-        <dependency id="Cogworks.AzureSearch" version="1.0.0" />
-        <dependency id="Cogworks.AzureSearch.IoC.LightInject" version="1.0.0" />
+        <dependency id="Cogworks.AzureSearch" version="1.0.2" />
         <dependency id="UmbracoCms.Core" version="8.6.4" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="bin\$Configuration$\Cogworks.AzureSearch.dll" target="lib/net472" />
-    <file src="bin\$Configuration$\Cogworks.AzureSearch.IoC.LightInject.dll" target="lib/net472" />
     <file src="bin\$Configuration$\Cogworks.AzureSearch.IoC.Umbraco.dll" target="lib/net472" />
   </files>
 </package>
