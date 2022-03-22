@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <!-- Project Details -->
+    <PropertyGroup>
+        <Company>The Cogworks Limited</Company>
+        <Authors>$(Company)</Authors>
+        <Owners>$(Company)</Owners>
+        <Copyright>Copyright (c) $(Company) $([System.DateTime]::Now.Year)</Copyright>
+        <PackageProjectUrl>https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <!-- Project Setup -->
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;net5.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <NoWarn>1591;1701;1702;8032;NU1701;AD0001;CA1041;CS0311;CS5001</NoWarn>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <Deterministic>true</Deterministic>
+        <BuildInParallel>false</BuildInParallel>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' != 'Release'">
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    </PropertyGroup>
+
+    <!-- Source Link -->
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    </ItemGroup>
+</Project>
