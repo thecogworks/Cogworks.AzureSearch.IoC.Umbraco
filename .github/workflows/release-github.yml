@@ -9,16 +9,16 @@ jobs:
   github_packages_release:
     name: GitHub Packages Release
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       # GitHub Packages Feed settings
-      GITHUB_USER: thecogworks
+      GITHUB_USER: ${{ github.repository_owner }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_FEED: https://nuget.pkg.github.com/thecogworks
+      GITHUB_FEED: https://nuget.pkg.github.com/${{ github.repository_owner }}
       GITHUB_PACKAGES_OUTPUT: ${{ github.workspace }}/github_packages
 
       # Project Setup
-      PROJECT_NAME: 'Cogworks.AzureSearch.Umbraco'
+      PROJECT_NAME: ${{ github.event.repository.name }}
 
     steps:
       - name: Checkout master
@@ -36,7 +36,7 @@ jobs:
       - name: Download a single artifact
         uses: aochmann/actions-download-artifact@1.0.2
         with:
-          name: build_${{ env.PROJECT_NAME }}.${{ env.VERSION }}
+          name: nuget_${{ env.PROJECT_NAME }}.${{ env.VERSION }}
           path: ${{ env.GITHUB_PACKAGES_OUTPUT }}
 
       - name: Push to GitHub Feed

@@ -9,7 +9,7 @@ jobs:
   nuget_release:
     name: NuGet Release
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       # Nuget Setup
       NUGET_VERSION: 'latest'
@@ -18,7 +18,7 @@ jobs:
       NUGET_FEED: https://api.nuget.org/v3/index.json
 
       # Project Setup
-      PROJECT_NAME: 'Cogworks.AzureSearch.Umbraco'
+      PROJECT_NAME: ${{ github.event.repository.name }}
 
     steps:
       - name: Checkout master
@@ -36,7 +36,7 @@ jobs:
       - name: Download a single artifact
         uses: aochmann/actions-download-artifact@1.0.2
         with:
-          name: build_${{ env.PROJECT_NAME }}.${{ env.VERSION }}
+          name: nuget_${{ env.PROJECT_NAME }}.${{ env.VERSION }}
           path: ${{ env.NUGET_OUTPUT }}
 
       - name: Configure NuGet
