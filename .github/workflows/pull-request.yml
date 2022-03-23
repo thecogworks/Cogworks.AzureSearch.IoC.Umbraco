@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results
-          path: ${{ env.ReportOutput}}\${{ env.TestReportFileName }}
+          path: ${{ env.ReportOutput}}/${{ env.TestReportFileName }}
 
   commenting:
     needs: build-and-test
