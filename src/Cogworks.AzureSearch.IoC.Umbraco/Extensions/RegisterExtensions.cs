@@ -1,5 +1,5 @@
-﻿using Cogworks.AzureSearch.IoC.Umbraco.Builders;
-using Cogworks.AzureSearch.Interfaces.Builder;
+﻿using Cogworks.AzureSearch.Interfaces.Builder;
+using Cogworks.AzureSearch.IoC.Umbraco.Builders;
 using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Cogworks.AzureSearch.IoC.Umbraco.Extensions

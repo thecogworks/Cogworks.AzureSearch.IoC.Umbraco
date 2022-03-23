@@ -29,15 +29,6 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
                                  ?? throw new ArgumentNullException(
                                      nameof(umbracoBuilder));
 
-        internal ContainerBuilder RegisterInitializers()
-        {
-            _umbracoBuilder
-                .Services
-                .AddTransient(typeof(IInitializer<>), typeof(Initializer<>));
-
-            return this;
-        }
-
         public IContainerBuilder RegisterIndexOptions(bool recreate, bool recreateOnUpdateFailure = false)
         {
             _umbracoBuilder
@@ -80,6 +71,37 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
                 .Services
                 .AddSingleton(
                     _ => new IndexDefinition<TDocument>(customIndex));
+
+            return this;
+        }
+
+        public IContainerBuilder RegisterDomainSearcher<TSearcher, TSearcherType, TDocument>()
+            where TDocument : class, IModel, new()
+            where TSearcher : BaseDomainSearch<TDocument>, TSearcherType
+            where TSearcherType : class
+        {
+            _umbracoBuilder
+                .Services
+                .AddSingleton<TSearcherType, TSearcher>();
+
+            return this;
+        }
+
+        public IContainerBuilder RegisterDomainSearcher<TSearcher, TSearcherType, TDocument>(TSearcherType instance)
+            where TDocument : class, IModel, new()
+            where TSearcher : BaseDomainSearch<TDocument>, TSearcherType
+            where TSearcherType : class
+        {
+            _umbracoBuilder.Services.AddTransient<TSearcherType>(_ => instance);
+
+            return this;
+        }
+
+        internal ContainerBuilder RegisterInitializers()
+        {
+            _umbracoBuilder
+                .Services
+                .AddTransient(typeof(IInitializer<>), typeof(Initializer<>));
 
             return this;
         }
@@ -145,28 +167,6 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
                 .AddTransient(
                     typeof(IIndexOperation<>),
                     typeof(IndexOperation<>));
-
-            return this;
-        }
-
-        public IContainerBuilder RegisterDomainSearcher<TSearcher, TSearcherType, TDocument>()
-            where TDocument : class, IModel, new()
-            where TSearcher : BaseDomainSearch<TDocument>, TSearcherType
-            where TSearcherType : class
-        {
-            _umbracoBuilder
-                .Services
-                .AddSingleton<TSearcherType, TSearcher>();
-
-            return this;
-        }
-
-        public IContainerBuilder RegisterDomainSearcher<TSearcher, TSearcherType, TDocument>(TSearcherType instance)
-            where TDocument : class, IModel, new()
-            where TSearcher : BaseDomainSearch<TDocument>, TSearcherType
-            where TSearcherType : class
-        {
-            _umbracoBuilder.Services.AddTransient<TSearcherType>(_ => instance);
 
             return this;
         }

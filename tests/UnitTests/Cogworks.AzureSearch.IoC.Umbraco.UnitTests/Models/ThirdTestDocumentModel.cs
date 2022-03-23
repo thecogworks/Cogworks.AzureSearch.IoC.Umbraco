@@ -1,16 +1,16 @@
 ﻿using Azure.Search.Documents.Indexes;
 using Cogworks.AzureSearch.Models;
 
-namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests.Models
+namespace Cogworks.AzureSearch.IoC.Umbraco.UnitTests.Models
 {
     public class ThirdTestDocumentModel : IModel
     {
         [SimpleField(IsKey = true, IsFilterable = true)]
-        [SearchableField()]
+        [SearchableField]
         public string Id { get; set; }
 
         [SimpleField(IsFilterable = true)]
-        [SearchableField()]
+        [SearchableField]
 
         public string Name { get; set; }
     }

@@ -1,9 +1,10 @@
 ﻿using Cogworks.AzureSearch.Interfaces.Searches;
+using Cogworks.AzureSearch.IoC.Umbraco.UnitTests.Models;
 using Cogworks.AzureSearch.Searchers;
-using Cogworks.AzureSearch.UmbracoIoc.UnitTests.Models;
 
-namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests.Searchers
+namespace Cogworks.AzureSearch.IoC.Umbraco.UnitTests.Searchers
 {
+#pragma warning disable SA1649 // SA1649FileNameMustMatchTypeName
     public interface ICustomTestSearch
     {
         void SomeCustomSearchExample();
@@ -21,7 +22,8 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests.Searchers
             // ...
             // End of custom filters
 
-            //  _ = base.Search("test", new SearchParameters());
+            // _ = base.Search("test", new SearchParameters());
         }
     }
+#pragma warning restore SA1649 // SA1649FileNameMustMatchTypeName
 }

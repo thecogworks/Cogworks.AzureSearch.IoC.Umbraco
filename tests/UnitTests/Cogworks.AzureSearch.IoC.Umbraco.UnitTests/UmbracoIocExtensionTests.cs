@@ -3,28 +3,28 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Azure.Search.Documents.Indexes.Models;
+using Cogworks.AzureSearch.Interfaces.Builder;
 using Cogworks.AzureSearch.Interfaces.Indexes;
 using Cogworks.AzureSearch.Interfaces.Initializers;
 using Cogworks.AzureSearch.Interfaces.Operations;
 using Cogworks.AzureSearch.Interfaces.Repositories;
 using Cogworks.AzureSearch.Interfaces.Searches;
-using Cogworks.AzureSearch.Models;
 using Cogworks.AzureSearch.IoC.Umbraco.Extensions;
-using Cogworks.AzureSearch.UmbracoIoc.UnitTests.Models;
-using Cogworks.AzureSearch.UmbracoIoc.UnitTests.Searchers;
-using NSubstitute;
-using Azure.Search.Documents.Indexes.Models;
-using Cogworks.AzureSearch.Interfaces.Builder;
+using Cogworks.AzureSearch.IoC.Umbraco.UnitTests.Models;
+using Cogworks.AzureSearch.IoC.Umbraco.UnitTests.Searchers;
+using Cogworks.AzureSearch.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Logging;
 using Xunit;
 
-namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
+namespace Cogworks.AzureSearch.IoC.Umbraco.UnitTests
 {
     public class UmbracoIocExtensionTests
     {
@@ -44,7 +44,6 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
                     .Location
                     .Replace("bin\\Debug", string.Empty));
 
-
             var typeLoader = new TypeLoader(
                 Substitute.For<ITypeFinder>(),
                 new VaryingRuntimeHash(),
@@ -52,7 +51,6 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
                 new DirectoryInfo(dirName),
                 Substitute.For<ILogger<TypeLoader>>(),
                 Substitute.For<IProfiler>());
-
 
             _umbracoBuilder = new UmbracoBuilder(
                 _serviceCollection,
