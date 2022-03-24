@@ -5,78 +5,73 @@ on:
 env:
   ReportOutput: '${{github.workspace}}'
   TestReportFileName: 'TestReport.${{github.run_number}}.md'
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-
-  # Dotnet Setup
-  DOTNET_VERSION: 3.1.401
-
-  # Stop wasting time caching packages
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-
-  # Disable sending usage data to Microsoft
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
-
-  # Solution Setup
-  CONFIG: 'Release'
-
-  # Nuget Setup
-  NUGET_VERSION: 'latest'
 
 jobs:
   build-and-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
+    env:
+      # Stop wasting time caching packages
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+      # Disable sending usage data to Microsoft
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+      # Solution Setup
+      CONFIG: 'Debug'
+      PROJECT_NAME: ${{ github.event.repository.name }}
+      VERSION: '1.0.0'
+
+      # Release Setup
+      NUGET_VERSION: 'latest'
+      NUGET_OUTPUT: '.nuget_output'
+      BINARIES_OUTPUT: '.binaries_output'
+
     steps:
-      - name: Checkout commit
+      - name: Checkout reference commit
+        if: ${{ github.event_name == 'pull_request' }}
         uses: actions/checkout@v2
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+      - name: Checkout master
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          fetch-depth: 0
 
-      - name: Setup .NET Core
+      - name: Get version
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        run: |
+          tag_check=$(git describe --exact-match `git rev-parse HEAD` | head -1)
+          echo "VERSION=$tag_check" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.13.0'
+
+      - name: Setup .NET 5.0.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '5.0.x'
+
+      - name: Setup .NET 6.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
 
       - name: Configure NuGet
         uses: nuget/setup-nuget@v1
         with:
           nuget-version: ${{ env.NUGET_VERSION }}
 
-      - name: NuGet Restore
-        shell: powershell
-        working-directory: ${{ github.workspace }}
-        run: |
-          $solutions = Get-ChildItem -Path . -Recurse -Include *.sln
-
-          foreach ($solutionFile in $solutions){
-            nuget restore "$solutionFile"
-          }
-
-      - name: Install Dependencies
-        shell: powershell
-        working-directory: ${{ github.workspace }}
-        run: |
-          $solutions = Get-ChildItem -Path . -Recurse -Include *.sln
-
-          foreach ($solutionFile in $solutions){
-            dotnet restore "$solutionFile"
-          }
+      - name: Restore Dependencies
+        run: dotnet restore
 
       - name: Build
-        shell: powershell
-        working-directory: ${{ github.workspace }}
         run: |
-          $solutions = Get-ChildItem -Path . -Recurse -Include *.sln
-
-          foreach ($solutionFile in $solutions){
-            msbuild.exe "$solutionFile" `
-            /p:Configuration=${{ env.CONFIG }} `
-            /p:DeployOnBuild=false `
-            /p:SkipInvalidConfigurations=true `
-            /p:TransformWebConfigEnabled=False `
-            /p:AutoParameterizationWebConfigConnectionStrings=False `
-            /p:MarkWebConfigAssistFilesAsExclude=False
-          }
+          dotnet build \
+            -c ${{ env.CONFIG }} \
+            --no-restore
 
       - name: Set PR build number
         id: PRNUMBER
@@ -85,7 +80,7 @@ jobs:
 
       - name: Set Test Title
         run: |
-          echo "::set-env name=title::Test Run for PR #${{ steps.PRNUMBER.outputs.pr }} (${{ github.run_number }})"
+          echo "Title=Test Run for PR #${{ steps.PRNUMBER.outputs.pr }} (${{ github.run_number }})" >> $GITHUB_ENV
 
       - name: Run Tests
         run: dotnet test --no-restore --no-build --configuration ${{ env.CONFIG }} --logger:"liquid.md;LogFileName=${{ env.ReportOutput}}\${{ env.TestReportFileName }};Title=${{ env.Title }};"
@@ -94,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results
-          path: ${{ env.ReportOutput}}\${{ env.TestReportFileName }}
+          path: ${{ env.ReportOutput}}/${{ env.TestReportFileName }}
 
   commenting:
     needs: build-and-test

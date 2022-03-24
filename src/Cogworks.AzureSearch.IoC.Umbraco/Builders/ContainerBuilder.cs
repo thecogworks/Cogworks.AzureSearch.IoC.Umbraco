@@ -1,4 +1,5 @@
-﻿using Azure.Search.Documents.Indexes.Models;
+﻿using System;
+using Azure.Search.Documents.Indexes.Models;
 using Cogworks.AzureSearch.Indexes;
 using Cogworks.AzureSearch.Initializers;
 using Cogworks.AzureSearch.Interfaces.Builder;
@@ -14,32 +15,25 @@ using Cogworks.AzureSearch.Options;
 using Cogworks.AzureSearch.Repositories;
 using Cogworks.AzureSearch.Searchers;
 using Cogworks.AzureSearch.Wrappers;
-using Umbraco.Core;
-using Umbraco.Core.Composing;
+using Microsoft.Extensions.DependencyInjection;
+using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
 {
     public class ContainerBuilder : IContainerBuilder
     {
-        private readonly IRegister _composingRegister;
+        private readonly IUmbracoBuilder _umbracoBuilder;
 
-        public ContainerBuilder(IRegister composingRegister)
-            => _composingRegister = composingRegister;
-
-        internal ContainerBuilder RegisterInitializers()
-        {
-            _composingRegister.Register(
-                typeof(IInitializer<>),
-                typeof(Initializer<>));
-
-            return this;
-        }
+        public ContainerBuilder(IUmbracoBuilder umbracoBuilder)
+            => _umbracoBuilder = umbracoBuilder
+                                 ?? throw new ArgumentNullException(
+                                     nameof(umbracoBuilder));
 
         public IContainerBuilder RegisterIndexOptions(bool recreate, bool recreateOnUpdateFailure = false)
         {
-            _composingRegister.Register(
-                _ => new IndexOption(recreate, recreateOnUpdateFailure),
-                Lifetime.Singleton);
+            _umbracoBuilder
+                .Services
+                .AddSingleton(_ => new IndexOption(recreate, recreateOnUpdateFailure));
 
             return this;
         }
@@ -47,13 +41,14 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
         public IContainerBuilder RegisterClientOptions(string serviceName, string credentials,
             string serviceEndpointUrl, bool searchHeaders = false)
         {
-            _composingRegister.Register(
-                _ => new ClientOption(
-                    serviceName,
-                    credentials,
-                    serviceEndpointUrl,
-                    searchHeaders),
-                Lifetime.Singleton);
+            _umbracoBuilder
+                .Services
+                .AddSingleton(
+                    _ => new ClientOption(
+                        serviceName,
+                        credentials,
+                        serviceEndpointUrl,
+                        searchHeaders));
 
             return this;
         }
@@ -61,9 +56,10 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
         public IContainerBuilder RegisterIndexDefinitions<TDocument>(string indexName)
             where TDocument : class, IModel, new()
         {
-            _composingRegister.Register(
-                _ => new IndexDefinition<TDocument>(indexName),
-                Lifetime.Singleton);
+            _umbracoBuilder
+                .Services
+                .AddSingleton(
+                    _ => new IndexDefinition<TDocument>(indexName));
 
             return this;
         }
@@ -71,60 +67,10 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
         public IContainerBuilder RegisterIndexDefinitions<TDocument>(SearchIndex customIndex)
             where TDocument : class, IModel, new()
         {
-            _composingRegister.Register(
-                _ => new IndexDefinition<TDocument>(customIndex),
-                Lifetime.Singleton);
-
-            return this;
-        }
-
-        internal ContainerBuilder RegisterIndexes()
-        {
-            _composingRegister.Register(
-                typeof(IIndex<>),
-                typeof(Index<>));
-
-            return this;
-        }
-
-        internal ContainerBuilder RegisterWrappers()
-        {
-            _composingRegister.Register(
-                typeof(IDocumentOperationWrapper<>),
-                typeof(DocumentOperationWrapper<>));
-
-            _composingRegister.Register<IIndexOperationWrapper, IndexOperationWrapper>();
-
-            return this;
-        }
-
-        internal ContainerBuilder RegisterRepositories()
-        {
-            _composingRegister.Register(
-                typeof(IRepository<>),
-                typeof(Repository<>));
-
-            return this;
-        }
-
-        internal ContainerBuilder RegisterSearchers()
-        {
-            _composingRegister.Register(
-                typeof(ISearcher<>),
-                typeof(Searcher<>));
-
-            return this;
-        }
-
-        internal ContainerBuilder RegisterOperations()
-        {
-            _composingRegister.Register(
-                typeof(IDocumentOperation<>),
-                typeof(DocumentOperation<>));
-
-            _composingRegister.Register(
-                typeof(IIndexOperation<>),
-                typeof(IndexOperation<>));
+            _umbracoBuilder
+                .Services
+                .AddSingleton(
+                    _ => new IndexDefinition<TDocument>(customIndex));
 
             return this;
         }
@@ -134,7 +80,9 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
             where TSearcher : BaseDomainSearch<TDocument>, TSearcherType
             where TSearcherType : class
         {
-            _composingRegister.Register<TSearcherType, TSearcher>(Lifetime.Singleton);
+            _umbracoBuilder
+                .Services
+                .AddSingleton<TSearcherType, TSearcher>();
 
             return this;
         }
@@ -144,7 +92,81 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
             where TSearcher : BaseDomainSearch<TDocument>, TSearcherType
             where TSearcherType : class
         {
-            _composingRegister.Register<TSearcherType>(instance);
+            _umbracoBuilder.Services.AddTransient<TSearcherType>(_ => instance);
+
+            return this;
+        }
+
+        internal ContainerBuilder RegisterInitializers()
+        {
+            _umbracoBuilder
+                .Services
+                .AddTransient(typeof(IInitializer<>), typeof(Initializer<>));
+
+            return this;
+        }
+
+        internal ContainerBuilder RegisterIndexes()
+        {
+            _umbracoBuilder
+                .Services
+                .AddTransient(
+                    typeof(IIndex<>),
+                    typeof(Index<>));
+
+            return this;
+        }
+
+        internal ContainerBuilder RegisterWrappers()
+        {
+            _umbracoBuilder
+                .Services
+                .AddTransient(
+                    typeof(IDocumentOperationWrapper<>),
+                    typeof(DocumentOperationWrapper<>));
+
+            _umbracoBuilder
+                .Services
+                .AddTransient<IIndexOperationWrapper, IndexOperationWrapper>();
+
+            return this;
+        }
+
+        internal ContainerBuilder RegisterRepositories()
+        {
+            _umbracoBuilder
+                .Services
+                .AddTransient(
+                    typeof(IRepository<>),
+                    typeof(Repository<>));
+
+            return this;
+        }
+
+        internal ContainerBuilder RegisterSearchers()
+        {
+            _umbracoBuilder
+                .Services
+                .AddTransient(
+                    typeof(ISearcher<>),
+                    typeof(Searcher<>));
+
+            return this;
+        }
+
+        internal ContainerBuilder RegisterOperations()
+        {
+            _umbracoBuilder
+                .Services
+                .AddTransient(
+                    typeof(IDocumentOperation<>),
+                    typeof(DocumentOperation<>));
+
+            _umbracoBuilder
+                .Services
+                .AddTransient(
+                    typeof(IIndexOperation<>),
+                    typeof(IndexOperation<>));
 
             return this;
         }

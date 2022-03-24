@@ -8,7 +8,7 @@ on:
 jobs:
   changelog_generator:
     name: Changelog Generator
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       branch: master
       CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -18,10 +18,15 @@ jobs:
       with:
         fetch-depth: 0
 
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16.13.0'
+
     - name: Set local user
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
+        git config --local pull.rebase false
 
     - name: Get tag branch
       run: |
@@ -46,27 +51,40 @@ jobs:
       run: |
         echo "Describe: $(git describe)"
         echo "Rev parse: $(git rev-parse $GITHUB_REF~0)"
-
         tag_check=$(git describe --exact-match `git rev-parse $GITHUB_REF~0`)
-        echo "tag=$tag_check" >> $GITHUB_ENV
+        echo "TAG=$tag_check" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: |
         rm -rf node_modules
         npm install
 
-    - name: Generate changelog and update npm version
+    - name: Bump version
       run: |
-        npm run release
+        npm run bump-version
+
+    - name: Commit updated package.json
+      run: |
+        git add .
+        git commit -m "${{ env.TAG }}" --no-verify
+
+    - name: Generate changelog
+      run: |
+        npm run generate-changelog
+
+    - name: Commit changelog
+      run: |
+        git add CHANGELOG.md
+        git commit -m "docs(changelog): regenerate CHANGELOG.md [skip ci]"
 
     - name: Remove tag
       run: |
-        git tag -d ${{ env.tag }}
+        git tag -d ${{ env.TAG }}
 
     - name: Updating tags
       run: |
         git pull "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git" master
-        git tag -a ${{ env.tag }} -m "${{ env.tag }}"
+        git tag -a ${{ env.TAG }} -m "${{ env.TAG }}"
         git push "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git" --tag -f
 
     - name: Pushing latest changes to master

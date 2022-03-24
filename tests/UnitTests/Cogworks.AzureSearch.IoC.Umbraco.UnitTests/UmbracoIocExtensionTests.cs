@@ -1,29 +1,36 @@
 ﻿// ReSharper disable PossibleNullReferenceException
 
+using System;
+using System.IO;
+using System.Reflection;
+using Azure.Search.Documents.Indexes.Models;
+using Cogworks.AzureSearch.Interfaces.Builder;
 using Cogworks.AzureSearch.Interfaces.Indexes;
 using Cogworks.AzureSearch.Interfaces.Initializers;
 using Cogworks.AzureSearch.Interfaces.Operations;
 using Cogworks.AzureSearch.Interfaces.Repositories;
 using Cogworks.AzureSearch.Interfaces.Searches;
-using Cogworks.AzureSearch.Models;
 using Cogworks.AzureSearch.IoC.Umbraco.Extensions;
-using Cogworks.AzureSearch.UmbracoIoc.UnitTests.Models;
-using Cogworks.AzureSearch.UmbracoIoc.UnitTests.Searchers;
-using LightInject;
+using Cogworks.AzureSearch.IoC.Umbraco.UnitTests.Models;
+using Cogworks.AzureSearch.IoC.Umbraco.UnitTests.Searchers;
+using Cogworks.AzureSearch.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
-using System;
-using Azure.Search.Documents.Indexes.Models;
-using Cogworks.AzureSearch.Interfaces.Builder;
-using Umbraco.Core.Composing;
-using Umbraco.Core.Composing.LightInject;
+using Umbraco.Cms.Core.Cache;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.Logging;
 using Xunit;
 
-namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
+namespace Cogworks.AzureSearch.IoC.Umbraco.UnitTests
 {
     public class UmbracoIocExtensionTests
     {
         private readonly IContainerBuilder _containerBuilder;
-        private readonly Composition _composing;
+        private readonly ServiceCollection _serviceCollection;
+        private readonly UmbracoBuilder _umbracoBuilder;
 
         private const string FirstDocumentIndexName = "first-test-document";
         private const string SecondDocumentIndexName = "second-test-document";
@@ -31,18 +38,31 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
 
         public UmbracoIocExtensionTests()
         {
-            var lightInjectContainer = LightInjectContainer.Create();
+            _serviceCollection = new ServiceCollection();
+            var dirName = Path.GetDirectoryName(
+                Assembly.GetExecutingAssembly()
+                    .Location
+                    .Replace("bin\\Debug", string.Empty));
 
-            _composing = new Composition(lightInjectContainer, null, null, null, null);
+            var typeLoader = new TypeLoader(
+                Substitute.For<ITypeFinder>(),
+                new VaryingRuntimeHash(),
+                Substitute.For<IAppPolicyCache>(),
+                new DirectoryInfo(dirName),
+                Substitute.For<ILogger<TypeLoader>>(),
+                Substitute.For<IProfiler>());
 
-            _containerBuilder = _composing.RegisterAzureSearch()
+            _umbracoBuilder = new UmbracoBuilder(
+                _serviceCollection,
+                Substitute.For<IConfiguration>(),
+                typeLoader);
+
+            _containerBuilder = _umbracoBuilder.RegisterAzureSearch()
                 .RegisterClientOptions("test", "test", "https://localhost")
                 .RegisterIndexOptions(false, false)
                 .RegisterIndexDefinitions<FirstTestDocumentModel>(FirstDocumentIndexName)
                 .RegisterIndexDefinitions<SecondTestDocumentModel>(SecondDocumentIndexName)
                 .RegisterIndexDefinitions<ThirdTestDocumentModel>(customIndex: new SearchIndex(ThirdDocumentIndexName));
-
-
         }
 
         [Theory]
@@ -67,12 +87,13 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
         public void Should_ReturnDedicatedRepositoryInstance(Type desiredObjectType)
         {
             // Arrange
-            var container = _composing.Concrete as ServiceContainer as IServiceContainer;
+            _umbracoBuilder.Build();
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            using (var scope = container.BeginScope())
+            using (var scope = serviceProvider.CreateScope())
             {
                 // Act
-                var instance = scope.GetInstance(desiredObjectType);
+                var instance = scope.ServiceProvider.GetService(desiredObjectType);
 
                 // Assert
                 Assert.NotNull(instance);
@@ -121,15 +142,16 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
         public void Should_ThrowException_When_IndexNotRegistered(Type desiredObjectType)
         {
             // Arrange
-            var container = _composing.Concrete as ServiceContainer as IServiceContainer;
-
             // Act
             var exceptionRecord = Record.Exception(() =>
             {
-                using (var scope = container.BeginScope())
+                _umbracoBuilder.Build();
+                var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+                using (var scope = serviceProvider.CreateScope())
                 {
                     // Act
-                    _ = scope.GetInstance(desiredObjectType);
+                    _ = scope.ServiceProvider.GetService(desiredObjectType);
                 }
             });
 
@@ -154,11 +176,12 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
             // Arrange
             _containerBuilder.RegisterDomainSearcher<CustomTestSearch, CustomTestSearch, FirstTestDocumentModel>();
 
-            var container = _composing.Concrete as ServiceContainer as IServiceContainer;
+            _umbracoBuilder.Build();
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            using (var scope = container.BeginScope())
+            using (var scope = serviceProvider.CreateScope())
             {
-                var customTestSearch = scope.GetInstance<CustomTestSearch>();
+                var customTestSearch = scope.ServiceProvider.GetService<CustomTestSearch>();
 
                 // Assert
                 Assert.NotNull(customTestSearch);
@@ -171,13 +194,15 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
             // Arrange
             var mockedCustomTestSearch = Substitute.For<ICustomTestSearch>();
 
-            _containerBuilder.RegisterDomainSearcher<CustomTestSearch, ICustomTestSearch, FirstTestDocumentModel>(mockedCustomTestSearch);
+            _containerBuilder.RegisterDomainSearcher<CustomTestSearch, ICustomTestSearch, FirstTestDocumentModel>(
+                mockedCustomTestSearch);
 
-            var container = _composing.Concrete as ServiceContainer as IServiceContainer;
+            _umbracoBuilder.Build();
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            using (var scope = container.BeginScope())
+            using (var scope = serviceProvider.CreateScope())
             {
-                var customTestSearch = scope.GetInstance<ICustomTestSearch>();
+                var customTestSearch = scope.ServiceProvider.GetService<ICustomTestSearch>();
 
                 // Act
                 customTestSearch.SomeCustomSearchExample();
@@ -208,14 +233,19 @@ namespace Cogworks.AzureSearch.UmbracoIoc.UnitTests
         public void Should_GetDedicatedIndexWithProperName()
         {
             // Arrange
-            // Act
-            var container = _composing.Concrete as ServiceContainer as IServiceContainer;
+            _umbracoBuilder.Build();
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
 
-            using (var scope = container.BeginScope())
+            // Act
+            using (var scope = serviceProvider.CreateScope())
             {
-                var firstTestDocumentIndexDefinition = scope.GetInstance<IndexDefinition<FirstTestDocumentModel>>();
-                var secondTestDocumentIndexDefinition = scope.GetInstance<IndexDefinition<SecondTestDocumentModel>>();
-                var thirdTestDocumentIndexDefinition = scope.GetInstance<IndexDefinition<ThirdTestDocumentModel>>();
+                var provider = scope.ServiceProvider;
+                var firstTestDocumentIndexDefinition =
+                    provider.GetService<IndexDefinition<FirstTestDocumentModel>>();
+                var secondTestDocumentIndexDefinition =
+                    provider.GetService<IndexDefinition<SecondTestDocumentModel>>();
+                var thirdTestDocumentIndexDefinition =
+                    provider.GetService<IndexDefinition<ThirdTestDocumentModel>>();
 
                 // Assert
                 Assert.NotNull(firstTestDocumentIndexDefinition);
