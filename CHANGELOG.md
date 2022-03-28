@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.0.0...2.0.1) (2022-03-28)
+
+
+### Features
+
+* removed unneeded stylecop and analyzers ([067b85c](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/commit/067b85c34d136c2704226344eb645aae5cf710bb))
+
+
+
 # [2.0.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/1.1.0...2.0.0) (2022-03-24)
 
 
