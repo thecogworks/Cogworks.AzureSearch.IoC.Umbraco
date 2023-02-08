@@ -809,3 +809,4 @@ $RECYCLE.BIN/
 !linting/.editorconfig
 !src/.editorconfig
 !src/**/.editorconfig
+tests/UnitTests/Cogworks.AzureSearch.IoC.Umbraco.UnitTests/net5.0/
