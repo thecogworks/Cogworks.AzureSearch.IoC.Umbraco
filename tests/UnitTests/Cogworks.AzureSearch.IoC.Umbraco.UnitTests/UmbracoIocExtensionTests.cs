@@ -44,13 +44,20 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.UnitTests
                     .Location
                     .Replace("bin\\Debug", string.Empty));
 
-            var typeLoader = new TypeLoader(
-                Substitute.For<ITypeFinder>(),
-                new VaryingRuntimeHash(),
-                Substitute.For<IAppPolicyCache>(),
-                new DirectoryInfo(dirName),
-                Substitute.For<ILogger<TypeLoader>>(),
-                Substitute.For<IProfiler>());
+            var typeLoader =
+#if NET6_0_OR_GREATER || NET7_0
+                new TypeLoader(
+                    Substitute.For<ITypeFinder>(),
+                    Substitute.For<ILogger<TypeLoader>>());
+#else
+                new TypeLoader(
+                    Substitute.For<ITypeFinder>(),
+                    new VaryingRuntimeHash(),
+                    Substitute.For<IAppPolicyCache>(),
+                    new DirectoryInfo(dirName),
+                    Substitute.For<ILogger<TypeLoader>>(),
+                    Substitute.For<IProfiler>());
+#endif
 
             _umbracoBuilder = new UmbracoBuilder(
                 _serviceCollection,
