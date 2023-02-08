@@ -53,15 +53,13 @@ jobs:
         with:
           node-version: '16.13.0'
 
-      - name: Setup .NET 5.0.x
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET 5/6/7
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '5.0.x'
-
-      - name: Setup .NET 6.0.x
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
+          dotnet-version: |
+            5.0.x
+            6.0.x
+            7.0.x
 
       - name: Configure NuGet
         uses: nuget/setup-nuget@v1
@@ -83,7 +81,8 @@ jobs:
           dotnet publish \
             -o ${{ env.BINARIES_OUTPUT }} \
             -c ${{ env.CONFIG }} \
-            -f net5.0 \
+            -f net7.0 \
+            --no-build \
             --no-restore
 
       - name: Create NuGet package file
