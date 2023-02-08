@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.0.1...2.1.0) (2023-02-08)
+
+
+### Features
+
+* updated package to support multiple Umbraco versions ([bce9b3a](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/commit/bce9b3a1dbfdc469ea4d593bd88150957f532fe6))
+
+
+
 ## [2.0.1](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.0.0...2.0.1) (2022-03-28)
 
 
