@@ -42,11 +42,11 @@
 
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="Umbraco.Cms.Core" Version="[12.0.0,)" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[13.1.1,)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Umbraco.Cms.Core" Version="[11.0.0,12.0.0)" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[11.0.0,12.99.0)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
