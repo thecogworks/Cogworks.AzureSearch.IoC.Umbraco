@@ -1,3 +1,13 @@
+# [2.2.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.1.0...2.2.0) (2024-06-10)
+
+
+### Features
+
+* updated net versions in pipelines ([59494a2](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/commit/59494a2c0bfa2022735a1b9f88ed4ec8a0587987))
+* upgraded to .net v8 ([c7084b5](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/commit/c7084b53797b474b9955f5ef6b956d3fdac907b8))
+
+
+
 # [2.1.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.0.1...2.1.0) (2023-02-08)
 
 
