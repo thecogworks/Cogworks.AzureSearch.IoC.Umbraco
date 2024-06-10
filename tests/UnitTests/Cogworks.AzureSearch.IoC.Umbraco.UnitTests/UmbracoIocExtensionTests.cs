@@ -39,17 +39,17 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.UnitTests
         public UmbracoIocExtensionTests()
         {
             _serviceCollection = new ServiceCollection();
-            var dirName = Path.GetDirectoryName(
-                Assembly.GetExecutingAssembly()
-                    .Location
-                    .Replace("bin\\Debug", string.Empty));
 
             var typeLoader =
-#if NET6_0_OR_GREATER || NET7_0
+#if NET6_0_OR_GREATER || NET7_0 || NET8_0
                 new TypeLoader(
                     Substitute.For<ITypeFinder>(),
                     Substitute.For<ILogger<TypeLoader>>());
 #else
+            var dirName = Path.GetDirectoryName(
+                Assembly.GetExecutingAssembly()
+                    .Location
+                    .Replace("bin\\Debug", string.Empty));
                 new TypeLoader(
                     Substitute.For<ITypeFinder>(),
                     new VaryingRuntimeHash(),

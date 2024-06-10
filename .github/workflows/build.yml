@@ -33,11 +33,11 @@ jobs:
     steps:
       - name: Checkout reference commit
         if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Checkout master
         if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: master
           fetch-depth: 0
@@ -53,13 +53,13 @@ jobs:
         with:
           node-version: '16.13.0'
 
-      - name: Setup .NET 5/6/7
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET 6/7/8
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            5.0.x
             6.0.x
             7.0.x
+            8.0.x
 
       - name: Configure NuGet
         uses: nuget/setup-nuget@v1
@@ -81,7 +81,7 @@ jobs:
           dotnet publish \
             -o ${{ env.BINARIES_OUTPUT }} \
             -c ${{ env.CONFIG }} \
-            -f net7.0 \
+            -f net8.0 \
             --no-build \
             --no-restore
 

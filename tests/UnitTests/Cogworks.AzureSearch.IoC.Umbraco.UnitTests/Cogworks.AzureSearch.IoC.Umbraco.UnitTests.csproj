@@ -4,9 +4,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;net5.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <NoWarn>1591;1701;1702;8032;NU1701;AD0001;CA1041;CS0311;CS5001</NoWarn>
+    <NoWarn>1591;1701;1702;8032;NU1701;NU1902;AD0001;CA1041;CS0311;CS5001</NoWarn>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Deterministic>true</Deterministic>
     <BuildInParallel>false</BuildInParallel>
@@ -19,6 +19,11 @@
     <EnablePackageValidation>true</EnablePackageValidation>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0'">
@@ -35,16 +40,17 @@
     <ProjectReference Include="..\..\..\src\Cogworks.AzureSearch.IoC.Umbraco\Cogworks.AzureSearch.IoC.Umbraco.csproj"/>
   </ItemGroup>
 
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,)" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Umbraco.Cms.Core" Version="[11.0.0,)"/>
+    <PackageReference Include="Umbraco.Cms.Core" Version="[11.0.0,12.99.0)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0, 11.0.0)"/>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-    <PackageReference Include="Umbraco.Cms.Core" Version="[9.0.0, 10.0.0)"/>
   </ItemGroup>
 
   <ItemGroup>
