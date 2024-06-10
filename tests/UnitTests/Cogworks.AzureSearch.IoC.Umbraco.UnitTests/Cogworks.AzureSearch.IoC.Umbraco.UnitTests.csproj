@@ -6,7 +6,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <NoWarn>1591;1701;1702;8032;NU1701;AD0001;CA1041;CS0311;CS5001</NoWarn>
+    <NoWarn>1591;1701;1702;8032;NU1701;NU1902;AD0001;CA1041;CS0311;CS5001</NoWarn>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Deterministic>true</Deterministic>
     <BuildInParallel>false</BuildInParallel>
@@ -42,7 +42,7 @@
 
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="Umbraco.Cms.Core" Version="[13.1.1,)" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
