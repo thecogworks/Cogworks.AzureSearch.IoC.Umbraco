@@ -9,7 +9,7 @@ jobs:
   github_packages_release:
     name: GitHub Packages Release
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       # GitHub Packages Feed settings
       GITHUB_USER: ${{ github.repository_owner }}

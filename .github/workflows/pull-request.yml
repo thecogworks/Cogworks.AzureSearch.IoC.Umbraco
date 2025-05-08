@@ -8,7 +8,7 @@ env:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       # Stop wasting time caching packages
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true

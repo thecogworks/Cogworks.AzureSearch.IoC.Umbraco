@@ -9,7 +9,7 @@ jobs:
   nuget_release:
     name: NuGet Release
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       # Nuget Setup
       NUGET_VERSION: 'latest'
