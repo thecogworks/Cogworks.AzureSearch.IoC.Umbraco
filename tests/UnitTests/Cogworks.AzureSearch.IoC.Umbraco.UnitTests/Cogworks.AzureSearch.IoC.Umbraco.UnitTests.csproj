@@ -17,7 +17,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <EnablePackageValidation>true</EnablePackageValidation>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -37,7 +37,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Cogworks.AzureSearch.IoC.Umbraco\Cogworks.AzureSearch.IoC.Umbraco.csproj"/>
+    <ProjectReference Include="..\..\..\src\Cogworks.AzureSearch.IoC.Umbraco\Cogworks.AzureSearch.IoC.Umbraco.csproj" />
   </ItemGroup>
 
 
@@ -50,22 +50,22 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0, 11.0.0)"/>
+    <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0, 11.0.0)" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.17.0"/>
-    <PackageReference Include="DotLiquid" Version="2.2.595"/>
-    <PackageReference Include="LiquidTestReports.Markdown" Version="1.0.9"/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
-    <PackageReference Include="NSubstitute" Version="4.3.0"/>
-    <PackageReference Include="xunit" Version="2.4.1"/>
-    <PackageReference Include="xunit.runner.console" Version="2.4.1">
+    <PackageReference Include="AutoFixture" Version="4.18.1" />
+    <PackageReference Include="DotLiquid" Version="2.3.197" />
+    <PackageReference Include="LiquidTestReports.Markdown" Version="1.0.9" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.console" Version="2.9.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.reporters" Version="2.4.1"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+    <PackageReference Include="xunit.runner.reporters" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

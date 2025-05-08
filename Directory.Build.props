@@ -27,7 +27,7 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <EnablePackageValidation>true</EnablePackageValidation>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 

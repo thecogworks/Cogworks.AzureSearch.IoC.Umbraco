@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Azure.Search.Documents" Version="11.2.0" />
-      <PackageReference Include="Cogworks.AzureSearch" Version="1.0.2" />
+      <PackageReference Include="Azure.Search.Documents" Version="11.6.0" />
+      <PackageReference Include="Cogworks.AzureSearch" Version="1.1.0" />
     </ItemGroup>
 </Project>
