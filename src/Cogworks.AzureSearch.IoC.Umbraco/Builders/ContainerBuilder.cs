@@ -39,7 +39,7 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
         }
 
         public IContainerBuilder RegisterClientOptions(string serviceName, string credentials,
-            string serviceEndpointUrl, bool searchHeaders = false)
+            string serviceEndpointUrl, bool searchHeaders = false, bool useTokenCredentials = false)
         {
             _umbracoBuilder
                 .Services
@@ -48,7 +48,8 @@ namespace Cogworks.AzureSearch.IoC.Umbraco.Builders
                         serviceName,
                         credentials,
                         serviceEndpointUrl,
-                        searchHeaders));
+                        searchHeaders,
+                        useTokenCredentials));
 
             return this;
         }
