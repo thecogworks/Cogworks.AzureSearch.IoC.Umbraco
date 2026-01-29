@@ -1,3 +1,29 @@
+# [2.5.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.4.0...2.5.0) (2026-01-29)
+
+
+
+# [2.4.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.3.1...2.4.0) (2025-06-11)
+
+
+### Features
+
+* added managed identity ([3a95dfb](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/commit/3a95dfb46b68b82043b070622392925cd306168e))
+
+
+
+## [2.3.1](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.3.0...2.3.1) (2025-05-08)
+
+
+### Features
+
+* added token credentials usage ([30c532c](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/commit/30c532c844c122582a8aeac3c44ad73e2cd91f12))
+
+
+
+# [2.3.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.2.0...2.3.0) (2025-05-08)
+
+
+
 # [2.2.0](https://github.com/thecogworks/Cogworks.AzureSearch.IoC.Umbraco/compare/2.1.0...2.2.0) (2024-06-10)
 
 
