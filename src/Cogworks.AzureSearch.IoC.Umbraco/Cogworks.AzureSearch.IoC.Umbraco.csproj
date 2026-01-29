@@ -1,34 +1,43 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <ContentTargetFolders>.</ContentTargetFolders>
-        <PackageId>Cogworks.AzureSearch.IoC.Umbraco</PackageId>
-        <Title>Cogworks.AzureSearch.IoC.Umbraco</Title>
-        <Description>An Umbraco 10+ extension to Cogworks.AzureSearch.</Description>
-        <Product>An Umbraco 10+ extension to Cogworks.AzureSearch</Product>
-        <PackageTags>Azure Search Umbraco container IoC</PackageTags>
-        <Version></Version>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-    </PropertyGroup>
+  <PropertyGroup>
+    <ContentTargetFolders>.</ContentTargetFolders>
+    <PackageId>Cogworks.AzureSearch.IoC.Umbraco</PackageId>
+    <Title>Cogworks.AzureSearch.IoC.Umbraco</Title>
+    <Description>An Umbraco 10+ extension to Cogworks.AzureSearch.</Description>
+    <Product>An Umbraco 10+ extension to Cogworks.AzureSearch</Product>
+    <PackageTags>Azure Search Umbraco container IoC</PackageTags>
+    <Version></Version>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <TargetFrameworks>net10.0;net8.0;net7.0;net6.0</TargetFrameworks>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-        <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,)" />
-    </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Umbraco.Cms.Core" Version="[17.0.0,)" />
+  </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-        <PackageReference Include="Umbraco.Cms.Core" Version="[11.0.0,12.99.0)" />
-    </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,16.99.0)" />
+  </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-        <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0, 11.0.0)" />
-    </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,16.99.0)" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Azure.Search.Documents" Version="11.6.0" />
-      <PackageReference Include="Cogworks.AzureSearch" Version="1.2.2" />
-    </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="Umbraco.Cms.Core" Version="[11.0.0,12.99.0)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0, 11.0.0)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Search.Documents" Version="11.7.0" />
+    <PackageReference Include="Cogworks.AzureSearch" Version="1.2.2" />
+  </ItemGroup>
 </Project>
